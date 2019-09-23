@@ -1,0 +1,13 @@
+28552 execve("/bin/sh", ["sh", "-c", "ping  -c 4 ; echo \"malware\" > /t"...], [/* 9 vars */] <unfinished ...>
+...
+28552 open("/tmp/maliciousfile", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3
+28552 fcntl(1, F_DUPFD, 10)             = 10
+28552 close(1)                          = 0
+28552 fcntl(10, F_SETFD, FD_CLOEXEC)    = 0
+28552 dup2(3, 1)                        = 1
+28552 close(3)                          = 0
+28552 write(1, "malware\n", 8)          = 8
+28552 dup2(10, 1)                       = 1
+28552 close(10)                         = 0
+28552 exit_group(0)                     = ?
+28552 +++ exited with 0 +++

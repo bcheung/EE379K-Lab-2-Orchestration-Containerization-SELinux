@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{minted}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{CJKutf8}
+
+\author{Student: Brian Cheung bc32427 \\ Professor: Mohit Tiwari \\ TA: Antonio Espinoza \\ Department of Electrical \& Computer Engineering \\ The University of Texas at Austin}
+\date{\today}
+\title{EE379K Enterprise Network Security Lab 2 Report}
+\hypersetup{
+ pdfauthor={Student: Brian Cheung bc32427 \\ Professor: Mohit Tiwari \\ TA: Antonio Espinoza \\ Department of Electrical \& Computer Engineering \\ The University of Texas at Austin},
+ pdftitle={EE379K Enterprise Network Security Lab 2 Report},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={},
+ pdflang={English}}
+
+\begin{document}
+
+\maketitle
+\newpage
+\section*{Part 1 - Vulnerable Web Apps}
+\label{sec:part-1}
+The task was to implement
+\subsection*{1a - Set up a web-service in a container}
+
+\subsection*{1b - Getting familiar with strace}
+One of the methods to detect an exploit on the DVWA is to look for suspicious system calls using \verb|strace|.
+Since DVWA was ran with Docker, a process called \verb|containerd| executes the system calls for the container.
+
+\noindent To get the PID of \verb|containerd|, the following was run:
+\begin{minted}{bash}
+  $ ps -ef | grep containerd
+  root      1155     1  0 09:36 ?        00:00:08 /usr/bin/containerd
+\end{minted}
+
+\noindent \verb|strace| can be attached to \verb|containerd| and all of its forked child processes by running the following command:
+\begin{minted}{bash}
+  $ sudo strace -p 1155 -o strace.txt -f
+\end{minted}
+
+\begin{minted}{bash}
+  $ docker run --rm -it -p 80:80 vulnerables/web-dvwa
+\end{minted}
+
+\noindent Injected bash command:
+\verb|; echo "malware" > /tmp/maliciousfile|
+
+\begin{minted}{bash}
+  28552 execve("/bin/sh", ["sh", "-c", "ping  -c 4 ; echo \"malware\" > /t"...], [/* 9 vars */] <unfinished ...>
+  ...
+  28552 open("/tmp/maliciousfile", O_WRONLY|O_CREAT|O_TRUNC, 0666) = 3
+  28552 fcntl(1, F_DUPFD, 10)             = 10
+  28552 close(1)                          = 0
+  28552 fcntl(10, F_SETFD, FD_CLOEXEC)    = 0
+  28552 dup2(3, 1)                        = 1
+  28552 close(3)                          = 0
+  28552 write(1, "malware\n", 8)          = 8
+  28552 dup2(10, 1)                       = 1
+  28552 close(10)                         = 0
+  28552 exit_group(0)                     = ?
+  28552 +++ exited with 0 +++
+\end{minted}
+
+\section*{Part 2 - SELinux}
+\label{sec:part-1}
+The task was to implement
+\subsection*{2a - Set up}
+
+\section*{Conclusion}
+\label{sec:conclusion}
+The lab took about 40 hours which was a bit longer than expected.
+It was pretty interesting learning about socket connections in different languages and how GET requests are built using socket connections.
+I think some parts of the lab were a little unclear and needed further clarification.
+Overall, this lab served its purpose in providing a more hands-on experience that helped improve my understanding of networking.
+
+\nocite{*}
+\bibliography{bibliography}
+\bibliographystyle{ieeetr}
+\end{document}
