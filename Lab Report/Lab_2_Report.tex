@@ -23,7 +23,6 @@
 \newpage
 \section*{Part 1 - Vulnerable Web Apps}
 \label{sec:part-1}
-The task was to implement
 \subsection*{1a - Set up a web-service in a container}
 For this lab, the Damn Vulnerable Web App (DVWA) was set up as a web-service in a Docker container
 using the following guide ~\cite{dvwa} and set to low difficulty.
@@ -37,7 +36,7 @@ The following image\ref{fig:php-injection} is the output of the script:
   \centering
   \includegraphics[width=.9\linewidth]{./php-injection.png}
   \caption{\label{fig:php-injection}
-  Screenshot of the server's output after executing the PHP script.}
+  Screenshot of the server's output after executing the PHP script}
 \end{figure}
 
 \noindent Observations:
@@ -103,17 +102,17 @@ Then running the \verb|simple| executable, created a file, \verb|simple.txt|, wi
 The following figure shows the output of running \verb|ls -Z|:
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.71\linewidth]{./ls-z.png}
+  \includegraphics[width=.9\linewidth]{./ls-z.png}
   \caption{\label{fig:ls-z}
-  Screenshot of the context of \verb|simple.txt|.}
+  Screenshot of the context of simple.txt}
 \end{figure}
 
 The following figure shows the error received when the \verb|simple| executable tries to read \verb|secret.txt| without the correct required permissions:
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=.71\linewidth]{./log.png}
+  \includegraphics[width=.9\linewidth]{./log.png}
   \caption{\label{fig:log}
-  Screenshot of log denying access to secret.txt.
+  Screenshot of log denying access to secret.txt}
 \end{figure}
 
 Context files (simple.fc) "declare the security contexts that are applied to files when the policy is installed"~\cite{context}.
