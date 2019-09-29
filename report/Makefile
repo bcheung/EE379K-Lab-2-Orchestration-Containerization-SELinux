@@ -1,4 +1,4 @@
-PAPER = Lab_2_Report
+PAPER = report
 TEX = $(wildcard *.tex)
 BIB = bibliography.bib
 FIGS = $(wildcard figs/*.pdf figs/*.png graphs/*.pdf graphs/*.png)
