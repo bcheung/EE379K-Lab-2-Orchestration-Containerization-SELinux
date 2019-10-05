@@ -137,7 +137,7 @@ were changed to:
 \end{minted}
 in order to deploy 2 instances of the webserver application.
 
-The following command:
+\noindent The following command:
 \begin{minted}{bash}
   $ microk8s.kubectl -n kube-system edit service kubernetes-dashboard
 \end{minted}
@@ -159,7 +159,8 @@ The exposed port number is 32191 as specified on line 5:
 \end{minted}
 
 In order to open the dashboard, the secret token must be inputted to login. Once logged in,
-the dashboard shows all of the pods in the default namespace as shown in Figure~\ref{fig:dashboard-def}.
+the dashboard shows all of the pods in the \verb|default| namespace as shown in Figure~\ref{fig:dashboard-def}.
+When viewing other namespaces, no pods show up as the \verb|user-sa| service account does not have access to other namespaces.
 
 In comparison to the output of running \verb|microk8s.kubectl get pods --all-namespaces| as shown in Figure~\ref{fig:pods},
 not all of the pods are shown on the dashboard because the namespace of the service account is \verb|default| as specified on
@@ -217,12 +218,13 @@ Next, copy the secret token to login to the dashboard.
 \end{minted}
 
 After logging in with the secret from the service account \verb|kube-system-sa|,
-the dashboard displays the pods from the \verb|kube-system| namespace as shown in Figure~\ref{fig:dashboard-kube} below.
+the dashboard displays the pods from the \verb|kube-system| namespace as shown in Figure~\ref{fig:dashboard-kube} below. 
+When viewing the \verb|default| namespace, no pods show up as the \verb|kube-system-sa| service account does not have access to the \verb|default| namespace.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=.9\linewidth]{./dashboard-def.png}
   \caption{\label{fig:dashboard-def}
-  Screenshot of the dashboard viewing the pods in the default namespace with the userS-sa service account}
+  Screenshot of the dashboard viewing the pods in the default namespace with the user-sa service account}
 \end{figure}
 \begin{figure}[htbp]
   \centering
