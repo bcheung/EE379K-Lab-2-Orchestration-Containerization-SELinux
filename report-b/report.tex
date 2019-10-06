@@ -235,10 +235,74 @@ When viewing the \verb|default| namespace, no pods show up as the \verb|kube-sys
 
 \newpage
 \subsection*{3b - Creating a kubernetes cluster for DVWA}
+The objective of this section was to split up the DVWA to run the MySQL DB and Webserver each in their own containers.
+The source code for this section is in the \verb|docker-vulnerable-dvwa| directory (part-3/part-b/docker-vulnerable-dvwa) and \verb|dvwa-k8s| directory (part-3/part-b/dvwa-k8s).
 
+\subsubsection*{Splitting DVWA with Dockerfiles and Docker Compose}\label{docker-compose-dvwa}
+This section uses the \verb|docker-vulnerable-dvwa| directory.
+The first step was to split up the Dockerfile in the DVWA repo into two separate Dockerfiles (one for the MySQL DB and the other for the Apache Webserver).
+Next, the \verb|docker-compose.yml| (part-3/part-b/docker-vulnerable-dvwa/docker-compose.yml) file creates and runs the containers using the images created by the Dockerfiles.
+The \verb|docker-compose.yml| also specifies the ports to expose along with the environment variables needed for the MySQL DB.
+
+\noindent The following commands create the images and run the containers:
+\begin{minted}{bash}
+  $ docker-compose build  # creates the images
+  $ docker-compose up     # runs the containers
+\end{minted}
+Figure~\ref{fig:docker-compose-dvwa} shows the DVWA successfully connecting to the MySQL DB.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.9\linewidth]{./docker-compose-dvwa.png}
+  \caption{\label{fig:docker-compose-dvwa}S
+  Screenshot of the DVWA successfully connecting to and creating a MySQL DB}
+\end{figure}
+
+\subsubsection*{Split and Deploy DVWA into a Kubernetes cluster}
+This section uses the \verb|dvwa-k8s| directory.
+The next step was to deploy the DVWA into a Kubernetes cluster.
+This is done by creating .yaml files (part-3/part-b/dvwa-k8s/*.yaml)that defines each pod and service.
+For the DVWA, a pod and a service was created for each deployment of the MySQL DB and Apache Webserver.
+Follow the \verb|README.md| (part-3/part-b/dvwa-k8s/README.md) for instructions on how to deploy the Kubernetes cluster.
+The Kubernetes cluster successfully deploys, but the DVWA fails to connect to the MySQL DB.
+
+\subsection*{Fork Bomb Attack in a Kubernetes Pod}
+The objective of the following experiment is to crash a Kubernetes pod with a fork bomb attack in order to
+demonstrate the power of splitting up deployments into a Kubernetes cluster.
+
+A fork bomb attack is a form os a denial of service (DOS) attack that depletes system resources in order to slow down and ultimately crash the victim's system.~\cite{fork}
+It can be implemented with a simple script that runs in the background and calls itself twice over and over without any way of stopping the script.
+The following line is a fork bomb:
+\begin{minted}{bash}
+  bomb(){ bomb|bomb& };bomb
+\end{minted}
+
+Since the DVWA could not connect to the MySQL DB in the Kubernetes cluster, there was no way to test the fork bomb to observe what happens in the Kubernetes pod.
+Instead, the fork bomb was tested with the deployment of DVWA using the docker-compose.yml file.~\ref{docker-compose-dvwa}
+This crashed the entire virtual machine that the docker container was running on because the resource limits weren't set in the docker-compose.yml.
+
+\noindent Hypothesis:
+
+If the fork bomb was executed in a single DVWA Kubernetes pod, the pod would have crashed, but Kubernetes would automatically restart the crashed pod. (if configured to automatically restart)
+Then once the pod is ready, clients would be able to reconnect to the DVWA.
+However, if there were multiple DVWA Kubernetes pods, clients would be able to connect to the DVWA as long as there is at least one running pod that can handle the traffic.
+The load balancer would just distribute the traffic to the rest of the pods that are up and running while the crashed pod restarts.
+
+This experiment demonstrated how DOS attacks like the fork bomb attack can be mitigated or even prevented.
+This is extremely important in production where services need to be running 24/7.
+Any crash or down time could be very costly to a company.
+
+\newpage
 \section*{Conclusion}
 \label{sec:conclusion}
-
+I really enjoyed learning about the concepts of this lab.
+It was my favorite lab so far because all the concepts are very applicable to software engineering in the industry.
+I also never knew how load balancing and distributing traffic works, so it was cool to finally get the chance to
+explore how software systems handle high volumes traffic.
+However, part 3b was very vague and did not really give much background.
+It would have been helpful to know what dependencies are need in each of the containers
+because I spent a lot of time trying to figure out how DVWA works rather than learning about how Docker,
+Docker Compose files, and Kubernetes works, which is the main objective of the lab.
+This lab also took longer than expected. I would say I spent over 30 hours just trying to figure things out and read about the topics.
 
 \newpage
 \nocite{*}

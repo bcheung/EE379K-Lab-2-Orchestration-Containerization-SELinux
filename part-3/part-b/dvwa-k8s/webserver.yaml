@@ -1,22 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webserver
+  name: dvwa-php72
   labels:
-    app: apache
+    app: dvwa-php72
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: apache
+      app: dvwa-php72
   template:
     metadata:
       labels:
-        app: apache
+        app: dvwa-php72
     spec:
       containers:
-      - name: php-apache
-        image: localhost:32000/simplephpsql_k8s_website:k8s
+      - name: dvwa-php72
+        image: localhost:32000/dvwak8s_website:k8s
         imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
         ports:
         - containerPort: 80

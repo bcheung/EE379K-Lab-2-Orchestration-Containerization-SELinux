@@ -1,32 +1,39 @@
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: mysql
+  name: dvwa-mysql8
 spec:
   selector:
     matchLabels:
-      app: mysql8
+      app: dvwa-mysql8
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql8
+        app: dvwa-mysql8
     spec:
       containers:
       - image: mysql:8.0
-        name: mysql
+        name: dvwa-mysql8
         imagePullPolicy: IfNotPresent
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: .sweetpwd.
+          value: vulnerables
         - name: MYSQL_DATABASE
-          value: my_db
+          value: dvwa
         - name: MYSQL_USER
-          value: db_user
+          value: app
         - name: MYSQL_PASSWORD
-          value: .mypwd
+          value: vulnerables
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
         args: ["--default-authentication-plugin=mysql_native_password"]
         ports:
         - containerPort: 3306
-          name: mysql8
+          name: dvwa-mysql8

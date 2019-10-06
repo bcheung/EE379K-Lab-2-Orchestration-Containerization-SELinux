@@ -15,7 +15,7 @@ $DBMS = 'MySQL';
 # If you are using MariaDB then you cannot use root, you must use create a dedicated DVWA user.
 #   See README.md for more information on this.
 $_DVWA = array();
-$_DVWA[ 'db_server' ]   = 'dvwa-mysql8';
+$_DVWA[ 'db_server' ]   = 'dvwa-mysql8-service';
 $_DVWA[ 'db_database' ] = 'dvwa';
 $_DVWA[ 'db_user' ]     = 'app';
 $_DVWA[ 'db_password' ] = 'vulnerables';

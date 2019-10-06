@@ -3,10 +3,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: mysql-pv-claim
   labels:
-    app: mysql8
+    app: dvwa-mysql8
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi #5 GB
+      storage: 64Mi #64 MB
