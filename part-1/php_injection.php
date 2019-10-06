@@ -20,4 +20,4 @@ echo "<br><br>";
 echo "Number of processes running:<br>";
 $num_procs = shell_exec('ps aux --no-headers | wc -l');
 echo "$num_procs";
-
+?>
